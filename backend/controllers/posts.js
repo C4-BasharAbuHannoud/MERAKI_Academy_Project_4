@@ -1,0 +1,32 @@
+
+require("dotenv").config();
+const postsModel = require("../database/models/postSchema");
+
+const createNewPost=(req,res)=>{
+
+    const { title, description, user } = req.body;
+
+    const newPost = new postsModel({
+        title,
+        description,
+        user,
+    });
+  
+    newPost
+      .save()
+      .then((result) => {
+        res.status(201).json({
+          success: true,
+          massage: "Success post created",
+          posts: result,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({ success: false, massage: "server error" });
+      });
+  };
+
+  module.exports = {
+    createNewPost
+  };
+  

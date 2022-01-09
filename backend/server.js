@@ -11,6 +11,10 @@ app.use(express.json());
 const usersRouter = require("./routes/users");
 app.use("/users", usersRouter);
 
+const postsRouter = require("./routes/posts");
+app.use("/post", postsRouter);
+
+
 const PORT = 5000;
 
 app.listen(PORT, () => {
