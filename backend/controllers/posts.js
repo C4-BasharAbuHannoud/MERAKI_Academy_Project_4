@@ -5,12 +5,12 @@ const commenstModel = require("../database/models/commentsSchema");
 //1-function to create post
 const createNewPost = (req, res) => {
   const post_Id = req.params.post_Id;
-  const { title, description, user } = req.body;
+  const { title, description } = req.body;
 
   const newPost = new postsModel({
     title,
     description,
-    user,
+    user:req.token.userId
   });
 
   newPost
@@ -150,7 +150,7 @@ const deletePostByUserId = (req, res) => {
 };
 
 //7- get post by id post
-//heeeeeeeeeeeeeeeeeereeeeeeeeeeeeeee
+
 const getPostById = (req, res) => {
   let id = req.params.id;
   postsModel

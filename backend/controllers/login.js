@@ -36,7 +36,7 @@ const login = (req, res) => {
             message: "The password you’ve entered is incorrect",
           });
         }
-      }); // the end of compartion pf pass
+      }); 
 
       checkEmail = [];
     })
