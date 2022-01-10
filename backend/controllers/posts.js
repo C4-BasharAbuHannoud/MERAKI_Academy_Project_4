@@ -62,7 +62,26 @@ const getPostsByUserName = (req, res) => {
 
 //function update post
 
+const updatePostById = (req, res) => {
+  const updateById = req.params.id;
+  const { title, description, user } = req.body;
 
+  postsModel
+    .findOneAndUpdate({ _id: updateById }, req.body)
+    .then((result) => {
+      res.status(202).json({
+        success: true,
+        massage: `Success post updated`,
+        article: result,
+      });
+    })
+    .catch((err) => {
+      res.status(404).json({
+        success: false,
+        massage: `The post ==> ${updateById} Not Found`,
+      });
+    });
+};
 
 module.exports = {
   createNewPost,
