@@ -63,11 +63,11 @@ const getPostsByUserName = (req, res) => {
 //function update post
 
 const updatePostById = (req, res) => {
-  const updateById = req.params.id;
+  const postId = req.params.id;
   const { title, description, user } = req.body;
 
   postsModel
-    .findOneAndUpdate({ _id: updateById }, req.body)
+    .findByIdAndUpdate(postId, req.body,{ new: true })
     .then((result) => {
       res.status(202).json({
         success: true,
