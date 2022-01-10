@@ -26,7 +26,27 @@ const createNewPost=(req,res)=>{
       });
   };
 
+
+  // 2 - get all posts
+  const getAllPosts=(req,res)=>{
+      
+    postsModel.find({})
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        massage: "All the posts",
+        posts: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ success: false, massage: "server error" });
+    });
+};
+  
+
   module.exports = {
-    createNewPost
+    createNewPost,getAllPosts
   };
   
+
+ 
