@@ -4,8 +4,7 @@ const commenstModel = require("../database/models/commentsSchema");
 
 //1-function to create post
 const createNewPost = (req, res) => {
-
-    const post_Id = req.params.post_Id;
+  const post_Id = req.params.post_Id;
   const { title, description, user } = req.body;
 
   const newPost = new postsModel({
@@ -32,6 +31,7 @@ const createNewPost = (req, res) => {
 const getAllPosts = (req, res) => {
   postsModel
     .find({})
+    .populate("comments", "comment-_id")
     .then((result) => {
       res.status(200).json({
         success: true,
@@ -52,6 +52,11 @@ const getPostsByUserName = (req, res) => {
   postsModel
     .find({ user })
     .then((result) => {
+
+      if (result.length==0) {
+       return res.status(404).json({ success: false, massage: "No Posts For This User" });
+      }
+
       res.status(200).json({
         success: true,
         massage: `All the posts for ===> ${user}`,
@@ -136,7 +141,6 @@ const deletePostByUserId = (req, res) => {
     });
 };
 
-
 module.exports = {
   createNewPost,
   getAllPosts,
@@ -144,5 +148,4 @@ module.exports = {
   updatePostById,
   deletePostById,
   deletePostByUserId,
- 
 };
