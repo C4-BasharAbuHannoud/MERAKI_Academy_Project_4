@@ -25,6 +25,6 @@ postsRouter.get("/:id/post", getPostById);
 postsRouter.put("/:id", updatePostById);
 postsRouter.delete("/:id", deletePostById);
 postsRouter.delete("/", deletePostByUserId);
-postsRouter.post("/:post_id/comments", createNewComment);
+postsRouter.post("/:post_id/comments", authentication,createNewComment);
 
 module.exports = postsRouter;

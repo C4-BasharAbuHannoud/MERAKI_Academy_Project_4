@@ -9,7 +9,7 @@ const createNewComment = (req, res) => {
 
   const newComment = new commentsModel({
     comment,
-    commenter,
+    commenter:req.token.userId
   });
 
   newComment
