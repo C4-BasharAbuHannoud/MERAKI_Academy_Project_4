@@ -12,7 +12,7 @@ const usersRouter = require("./routes/users");
 app.use("/users", usersRouter);
 
 const postsRouter = require("./routes/posts");
-app.use("/post", postsRouter);
+app.use("/posts", postsRouter);
 
 
 const PORT = 5000;
