@@ -44,10 +44,10 @@ const getAllPosts = (req, res) => {
 //3- function to get Posts By UserName
 
 const getPostsByUserName = (req, res) => {
-    const user = req.params.user;
+  const user = req.params.user;
 
   postsModel
-    .find({user})
+    .find({ user })
     .then((result) => {
       res.status(200).json({
         success: true,
@@ -56,12 +56,17 @@ const getPostsByUserName = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(404).json({ success: false, massage: "The user Not Found",err });
+      res.status(404).json({ success: false, massage: "The user Not Found" });
     });
 };
+
+//function update post
+
+
 
 module.exports = {
   createNewPost,
   getAllPosts,
   getPostsByUserName,
+  updatePostById,
 };
