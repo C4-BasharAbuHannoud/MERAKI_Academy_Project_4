@@ -15,6 +15,9 @@ const postsRouter = require("./routes/posts");
 app.use("/posts", postsRouter);
 
 
+const loginRouter = require("./routes/login");
+app.use("/login", loginRouter);
+
 const PORT = 5000;
 
 app.listen(PORT, () => {
