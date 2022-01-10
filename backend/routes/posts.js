@@ -1,6 +1,14 @@
 const express = require("express");
-
-const { createNewPost,getAllPosts,getPostsByUserName,updatePostById,deletePostById,deletePostByUserId } = require("../controllers/posts");
+const {createNewComment}=require("../controllers/comments")
+const {
+  createNewPost,
+  getAllPosts,
+  getPostsByUserName,
+  updatePostById,
+  deletePostById,
+  deletePostByUserId,
+  
+} = require("../controllers/posts");
 
 // Create posts router
 const postsRouter = express.Router();
@@ -11,5 +19,6 @@ postsRouter.get("/:user", getPostsByUserName);
 postsRouter.put("/:id", updatePostById);
 postsRouter.delete("/:id", deletePostById);
 postsRouter.delete("/", deletePostByUserId);
+postsRouter.post("/:post_id/comments", createNewComment);
 
 module.exports = postsRouter;
