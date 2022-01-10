@@ -60,14 +60,14 @@ const getPostsByUserName = (req, res) => {
     });
 };
 
-//function update post
+//4-function update post
 
 const updatePostById = (req, res) => {
   const postId = req.params.id;
   const { title, description, user } = req.body;
 
   postsModel
-    .findByIdAndUpdate(postId, req.body,{ new: true })
+    .findByIdAndUpdate(postId, req.body, { new: true })
     .then((result) => {
       res.status(202).json({
         success: true,
@@ -83,9 +83,41 @@ const updatePostById = (req, res) => {
     });
 };
 
+//5- create func to delte  post by id 
+const deletePostById = (req, res) => {
+  const idPost = req.params.id;
+
+  postsModel
+    .findByIdAndDelete({ _id: idPost})
+    .then((result) => {
+      if (!result) {
+        res.status(404).json({
+          success: false,
+          massage: `The post  ==> ${idPost} Not Found`,
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        massage: `Success Delete post With id ==> ${idPost}`,
+      });
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+
+//6-create function to delete all posts for user 
+
+const deletePostByUserId = (req,res)=>{
+    
+}
+
 module.exports = {
   createNewPost,
   getAllPosts,
   getPostsByUserName,
   updatePostById,
+  deletePostById,
+  deletePostByUserId
 };
