@@ -52,9 +52,10 @@ const getPostsByUserName = (req, res) => {
   postsModel
     .find({ user })
     .then((result) => {
-
-      if (result.length==0) {
-       return res.status(404).json({ success: false, massage: "No Posts For This User" });
+      if (result.length == 0) {
+        return res
+          .status(404)
+          .json({ success: false, massage: "No Posts For This User" });
       }
 
       res.status(200).json({
@@ -64,6 +65,7 @@ const getPostsByUserName = (req, res) => {
       });
     })
     .catch((err) => {
+        console.log("hii");
       res.status(404).json({ success: false, massage: "The user Not Found" });
     });
 };
@@ -77,16 +79,22 @@ const updatePostById = (req, res) => {
   postsModel
     .findByIdAndUpdate(postId, req.body, { new: true })
     .then((result) => {
+       if (result==null){
+       return res.status(404).json({
+            success: false,
+            massage: `The post ==> ${postId} Not Found`,
+          });
+       }
       res.status(202).json({
         success: true,
         massage: `Success post updated`,
-        article: result,
+        post: result,
       });
     })
     .catch((err) => {
       res.status(404).json({
         success: false,
-        massage: `The post ==> ${updateById} Not Found`,
+        massage: `The post ==> ${postId} Not Found`,
       });
     });
 };
@@ -141,6 +149,29 @@ const deletePostByUserId = (req, res) => {
     });
 };
 
+//7- get post by id post
+//heeeeeeeeeeeeeeeeeereeeeeeeeeeeeeee
+const getPostById = (req, res) => {
+  let id = req.params.id;
+  postsModel
+    .findById(id)
+    .populate("comments", "comment-_id")
+    .then((result) => {
+      res.status(200).json({
+        success: true,
+        massage: `The Post ${id} `,
+        posts: result,
+      });
+
+      console.log("besho");
+    })
+    .catch((err) => {
+      res.status(404).json({
+        success: false,
+        massage: `The Post ==> ${id} Not Found`,
+      });
+    });
+};
 module.exports = {
   createNewPost,
   getAllPosts,
@@ -148,4 +179,5 @@ module.exports = {
   updatePostById,
   deletePostById,
   deletePostByUserId,
+  getPostById,
 };
