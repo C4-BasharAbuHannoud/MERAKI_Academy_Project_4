@@ -110,8 +110,30 @@ const deletePostById = (req, res) => {
 //6-create function to delete all posts for user 
 
 const deletePostByUserId = (req,res)=>{
-    
-}
+     const {user} = req.body
+
+     postsModel
+     .deleteMany({ user })
+     .then((result) => {
+       if (!result.deletedCount) {
+         res.status(404).json({
+           success: false,
+           massage: `No posts for this user ==> ${user}`,
+         });
+       }
+ 
+       res.status(200).json({
+         success: true,
+         massage: `Succeeded to delete all the posts for the user ⇾${user}`,
+         article: result,
+       });
+     })
+     .catch((err) => {
+       res.json(err);
+     });
+ };
+ 
+
 
 module.exports = {
   createNewPost,
