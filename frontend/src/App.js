@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import Login from "./comopnents/login";
 import Home from "./comopnents/Home";
 
+
 function App() {
   const [token, setToken] = useState("");
-
   useEffect(() => {
     const tokenStorage = localStorage.getItem("token");
     if (tokenStorage) {
@@ -17,12 +17,12 @@ function App() {
 
   return (
     <div className="App">
-      <Navigation/>
-    <Routes>
-          <Route path="/signup" element={<Register />} />
-          <Route path="/login" element={<Login setToken={setToken} />} />
-          <Route path="/Home" element={<Home token={token} />} />
-        </Routes>
+      {token ? <Logout setToken={setToken}/> : <Navigation />}
+      <Routes>
+        <Route path="/signup" element={<Register />} />
+        <Route path="/login" element={<Login setToken={setToken} />} />
+        <Route path="/Home" element={<Home token={token} />} />
+      </Routes>
     </div>
   );
 }
@@ -44,6 +44,16 @@ const Navigation = () => {
   );
 };
 
+const Logout = ({setToken}) => {
+  const navigate = useNavigate()
+ 
+  return (
+    <button className="LogOut" onClick={(e) => {
+      localStorage.removeItem("token");
+      setToken("");
+      navigate("/login")
+    }}>LogOut</button>
+  );
+};
 
 export default App;
-
