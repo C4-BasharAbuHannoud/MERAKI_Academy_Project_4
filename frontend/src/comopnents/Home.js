@@ -30,18 +30,19 @@ const Home = () => {
       });
   };
 
-  console.log(posts);
+  console.log( 'post: ',posts);
  return (
     <div className="Dash">
     
     {posts ? (
         posts.map((element, i) => {
             console.log(posts);
+            console.log(element.user.userName);
           return (
            
               <div className="squar">
                 <div className="tit_des_dele_1">
-                {/* <div className="title">{element.user}</div> */}
+                <div className="title">{element.user.userName}</div>
              
                   <div className="body">{element.description}</div>
                   {userId == element.user ? (
