@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginMessage, setMessage] = useState("");
+
+ 
 
   const navigate = useNavigate();
 
@@ -39,26 +40,30 @@ const Login = ({ setToken }) => {
       <button
         className="buttonRegs"
         onClick={(e) => {
-          axios
-            .post("http://localhost:5000/login", {
-              email: email,
-              password: password,
-            })
-            .then((result) => {
-              navigate("/dashboard");
-            })
-            .catch((err) => {
-              setMessage(err.response.data.message);
-              e.target.style.background =
-              "linear-gradient(-45deg,#f7797d,#f7797d)";
-            e.target.style.color = "black";
-              
-            });
-        }}
-      >
-        Login
+            axios
+              .post("http://localhost:5000/login", {
+                email: email,
+                password: password,
+              })
+              .then((result) => {
+                console.log(result.data);
+                setToken(result.data.token);
+              localStorage.setItem("token", result.data.token);
+                navigate("/Home")
+              })
+              .catch((err) => {
+          
+                console.log("err");
+                e.target.style.background =
+                "linear-gradient(-45deg,#f7797d,#f7797d)";
+              e.target.style.color = "black";
+                
+              });
+          }}
+        >
+          Login
       </button>
-      <div className="messagReg">{loginMessage}</div>
+    
      
     </div>
 
