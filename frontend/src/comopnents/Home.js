@@ -34,7 +34,26 @@ const Home = () => {
  return (
     <div className="Dash">
     
-     
+    {posts ? (
+        posts.map((element, i) => {
+            console.log(posts);
+          return (
+           
+              <div className="squar">
+                <div className="tit_des_dele_1">
+                {/* <div className="title">{element.user}</div> */}
+             
+                  <div className="body">{element.description}</div>
+                </div>
+              </div>
+              
+           
+          );
+        })
+      ) : (
+        <di className="No">No Posts</di>
+      )}
+      
     </div>
     
   );
