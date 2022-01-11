@@ -1,9 +1,14 @@
 import "./App.css";
+import Register from "./comopnents/register";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+
 
 function App() {
   return (
     <div className="App">
-      <h1>Welcome To App</h1>
+    <Routes>
+          <Route path="/signup" element={<Register />} />
+        </Routes>
     </div>
   );
 }
