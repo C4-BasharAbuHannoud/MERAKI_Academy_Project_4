@@ -66,8 +66,54 @@ const Home = () => {
                     <></>
                   )}
                 </div>
-               
+                <div className="style_div">
+                  {userId == element.user ? (
+                    <div className="caertPost_update">
+                      <h1 className="border_bottom_h1">Update Posts</h1>
+                     
+                      <div className="border_bottom">
+                        <input
+                          type="text"
+                          className="Post_update"
+                          placeholder="description"
+                          onChange={(e) => {
+                            setDescription(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <button
+                        className="update"
+                        onClick={(e) => {
+                       
+                          e.target.style.background =
+                            "linear-gradient(-45deg,#CAC531,#F3F9A7)";
+                          e.target.style.color = "black";
+                          axios
+                            .put(
+                              `http://localhost:5000/posts/${element._id}`,
+                              {
+                              
+                                description,
+                              }
+                            )
+                            .then((result) => {
+                              getAllPosts();
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                        }}
+                      >
+                        Update
+                      </button>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+
+                
              
+                </div>
               </div>
               
            
