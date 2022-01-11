@@ -31,7 +31,7 @@ const createNewPost = (req, res) => {
 const getAllPosts = (req, res) => {
   postsModel
     .find({})
-    .populate("comments", "comment-_id")
+    .populate("comments", "comment-_id").populate("user")
     .then((result) => {
       res.status(200).json({
         success: true,
