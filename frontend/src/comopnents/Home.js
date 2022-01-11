@@ -111,8 +111,56 @@ const Home = () => {
                     <></>
                   )}
 
-                
-             
+                  <div className="comment_AddComment">
+                    {element.comments.map((element, i) => {
+                      return (
+                        <div className="comment_style">
+                          comment: {element.comment}
+                        </div>
+                      );
+                    })}
+
+                    <div className="edit_style_comment">
+                      <input
+                        type="text"
+                        className="comment"
+                        placeholder="type here.."
+                        onChange={(e) => {
+                          setComment(e.target.value);
+                        }}
+                      />
+
+                      <button
+                        className="butt_comment"
+                        onClick={(e) => {
+                          e.target.style.background =
+                            "linear-gradient(-45deg,#CAC531,#F3F9A7)";
+                          e.target.style.color = "black";
+
+                          axios
+                            .post(
+                              `http://localhost:5000/posts/${element._id}/comments`,
+                              {
+                                comment,
+                              },
+                              {
+                                headers: {
+                                  Authorization: ` Bearer ${token}`,
+                                },
+                              }
+                            )
+                            .then((result) => {
+                              getAllPosts();
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                        }}
+                      >
+                        Add New Comment
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
               
