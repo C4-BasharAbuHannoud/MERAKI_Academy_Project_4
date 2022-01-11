@@ -44,7 +44,30 @@ const Home = () => {
                 {/* <div className="title">{element.user}</div> */}
              
                   <div className="body">{element.description}</div>
+                  {userId == element.user ? (
+                    <button
+                      className="delete"
+                      onClick={(e) => {
+                        axios
+                          .delete(
+                            `http://localhost:5000/posts/${element._id}`
+                          )
+                          .then((result) => {
+                            getAllPosts();
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+                      }}
+                    >
+                      delete
+                    </button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
+               
+             
               </div>
               
            
