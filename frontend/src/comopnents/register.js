@@ -102,7 +102,7 @@ const Register = () => {
             });
         }}
       >
-        Register
+        Sign Up
       </button>
       <div className="messagReg">{registerMessage}</div>
     </div>
