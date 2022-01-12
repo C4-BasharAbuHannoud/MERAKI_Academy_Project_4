@@ -2,6 +2,7 @@ import axios from "axios";
 
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
+
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [description, setDescription] = useState("");
@@ -41,12 +42,16 @@ const Home = () => {
           console.log(userId);
           return (
             <div className="squar">
-              <button className="newbutton" onClick={(e)=>{
-                 navigate("/newPost")
-              }}>New Post</button>
+              <Link to={`/profile/${element.user._id}`}></Link> // link to profile/ and to useParams in profile comopnents. 
+              <button
+                className="newbutton"
+                onClick={(e) => {
+                  navigate("/newPost");
+                }}
+              >
+                New Post
+              </button>
               <div className="tit_des_dele_1">
-                <div className="title">{element.user.userName}</div>
-
                 <div className="body">{element.description}</div>
                 {userId == element.user._id ? (
                   <button
