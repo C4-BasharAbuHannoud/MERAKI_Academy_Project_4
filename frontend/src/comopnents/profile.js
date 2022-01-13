@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {
   Routes,
   Route,
@@ -12,7 +12,7 @@ import {
 
 const Profile = () => {
   const { id } = useParams();
-  const [posts, setPosts] = useState([]); 
+  const [posts, setPosts] = useState([]);
   const [userId, setUserId] = useState("");
   const token = localStorage.getItem("token");
 
@@ -37,11 +37,27 @@ const Profile = () => {
       });
   };
 
-  return <div className="Profile">
-    {posts.map((element,i)=>{
-      
-    })}
-  </div>;
+  return (
+    <>
+      {posts.map((element, i) => {
+        return (
+          <div key="bashar">
+            <div key={"hi"}>{element.user.userName}</div>
+            <div key={"5"}>{element.description}</div>
+
+            <div
+              className="test_comments"
+              onClick={(e) => {
+                console.log("hii");
+              }}
+            >
+              comments
+            </div>
+          </div>
+        );
+      })}
+    </>
+  );
 };
 
 export default Profile;
