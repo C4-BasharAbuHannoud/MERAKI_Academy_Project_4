@@ -250,8 +250,14 @@ body{
 
 .linkreg{
   text-decoration: none;
+  font-size: 22px;
+  color: #54595f;
+
 }
 
+.linkreg:hover{
+  color: #1877f2;
+}
 
 .Home{
   display: flex;
@@ -267,17 +273,10 @@ body{
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+  z-index:1;
+
 }
 
-.dropdown-content a {
-  float: none;
-  color: black;
-  /* padding: 12px 16px; */
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
 
 .dropdown-content a:hover {
   background-color: #ddd;
@@ -290,6 +289,7 @@ body{
 .dropdown{
 
   display: flex;
+  
   
 }
 .Post{
@@ -317,8 +317,9 @@ body{
 .user_and_drop{
   display: flex;
    justify-content: space-around;
+   align-items: center;
    gap: 320px;
-   margin-bottom: 60px;
+   margin-bottom: 15px;
 }
 .body{
   display: flex;
@@ -331,11 +332,166 @@ body{
   width: 650px;
 
   border-top: 1px solid #dadde1;
-  padding-bottom: 5px;
+  padding-bottom: 1px;
 }
 
 .show_comments{
   cursor: pointer;
   font-size: 20px;
   color: #5c6168;
+  display: flex;
+  padding-left: 40px;
+padding-bottom: 10px;
+
+  
 }
+
+.show_comments:hover{
+  color: #1877f2;
+  
+
+}
+.nav{
+  display:flex;
+  justify-content: space-evenly;
+  align-items: center;
+  
+}
+.logo{
+  color: #1877f2;
+  font-size: 30px;
+  font-weight: bold;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+
+.page_create_post{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 70px;
+}
+
+.caertPost{
+  width: 550px;
+  height: 440px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: -0.2px 1px 7px #dadcdf;
+ 
+}
+
+.line_creatpost{
+  border-top: 1px solid #dadde1;
+  padding-bottom: 5px;
+}
+
+
+.button_craet_post{
+  width: 390px;
+  height: 50px;
+  outline-style: none;
+  background-color: #1877f2;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.button_craet_post:hover{
+background-color: #2960a8;
+}
+
+.line_title{
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  gap: 10px;
+  
+}
+.title_new_post{
+  font-size:30px;
+  font-weight: bold;
+}
+
+.body_create{
+ display: flex;
+ padding-left: 50px;
+}
+.input_create_post{
+  outline: none;
+  border-style: none;
+  font-size: 27px;
+ 
+}
+
+.click_new_post{
+  width: 650px;
+  height: 120px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: -0.2px 1px 7px #dadcdf;
+ 
+}
+
+.whats_on{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  
+  
+  border-radius: 30px;
+  background-color: #f0f2f5;
+  height: 40px;
+  width: 550px;
+  padding-left: 30px;
+  font-size: 20px;
+  color: #5b5b5e;
+}
+
+.whats_on:hover{
+  background-color: #b2b8c0;
+  color: #5b5b5e;
+  
+}
+
+
+
+.test{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  gap: 20px;
+  
+}
+
+.dropbtn{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size:33px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #5b5b5e;
+  
+
+}
+
