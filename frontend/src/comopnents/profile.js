@@ -1,14 +1,7 @@
 import axios from "axios";
 
-import React, { useState, useEffect, Fragment } from "react";
-import {
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const Profile = () => {
   const { id } = useParams();
@@ -18,7 +11,7 @@ const Profile = () => {
 
   useEffect(() => {
     allPostsForUser();
-  }, []);
+  }, [id]);
 
   const allPostsForUser = () => {
     axios
@@ -31,6 +24,7 @@ const Profile = () => {
         console.log("result data:", result.data);
         setPosts(result.data.posts);
         setUserId(result.data.userId);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -39,9 +33,9 @@ const Profile = () => {
 
   return (
     <>
-      {posts.map((element, i) => {
+      {posts.map((element, i) => { 
         return (
-          <div key="bashar">
+          <div >
             <div key={"hi"}>{element.user.userName}</div>
             <div key={"5"}>{element.description}</div>
 
