@@ -6,24 +6,28 @@ const NewPost = ({ token }) => {
   const [description, setDescription] = useState();
   const [craetPostMessage, setcraetPostMessage] = useState("");
   return (
-    <div className="big">
+  <div className="page_create_post">
       <div className="caertPost">
-        <div className="border_bottom">
-          <div className="New">New Post</div>
+        <div className="line_title">
+         
+          <div className="title_new_post">Create post</div>
+          <div className="line_creatpost"></div>
         </div>
 
-        <div className="border_bottom">
+        <div className="body_create">
           <input
             type="text"
-            className="post"
-            placeholder="description"
+            className="input_create_post"
+            placeholder="Whats on your Mind ?"
             onChange={(e) => {
               setDescription(e.target.value);
             }}
           />
         </div>
+
+        <div>
         <button
-          className="butt_craet"
+          className="button_craet_post"
           onClick={(e) => {
             axios
               .post(
@@ -38,30 +42,39 @@ const NewPost = ({ token }) => {
                 }
               )
               .then((result) => {
-                console.log(result.data);
-                e.target.style.background =
-                  "linear-gradient(-45deg,#CAC531,#F3F9A7)";
-                e.target.style.color = "black";
-                setcraetPostMessage(
-                  "The post has been created successfully"
-                );
+                
+                
+                console.log("soso",result.data);
+                console.log("momo",result.data.posts.description);
+
+            
+
+              e.target.style.background =
+              "linear-gradient(-45deg,#CAC531,#F3F9A7)";
+            e.target.style.color = "black";
+            setcraetPostMessage("The post has been created successfully");
+             
+               
+            
               })
               .catch((err) => {
                 e.target.style.background =
-                  "linear-gradient(-45deg,#f7797d,#f7797d)";
-                e.target.style.color = "black";
-                setcraetPostMessage(
-                  "Error happened while creating a new post, please try again"
-                );
+               "linear-gradient(-45deg,#f7797d,#f7797d)";
+             e.target.style.color = "black";
+             setcraetPostMessage(
+               "Error happened while creating a new post, please try again"
+             );
+
+
               });
           }}
         >
-          Create New Post
+           Post
         </button>
+        </div>
         <div className="messagReg">{craetPostMessage}</div>
       </div>
-    
-    </div>
+      </div>
   );
 };
 
