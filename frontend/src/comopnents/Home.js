@@ -2,21 +2,23 @@ import axios from "axios";
 
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { BsChatDots, BsListUl } from "react-icons/bs";
 
-const Home = () => {
+const Home = ({ setMyId }) => {
   const [posts, setPosts] = useState([]);
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
-  const [userId, setUserId] = useState("");
+
   const token = localStorage.getItem("token");
+  const [userId, setUserId] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     getAllPosts();
   }, []);
 
-  const getAllPosts = () => {
-    axios
+  const getAllPosts = async () => {
+    await axios
       .get("http://localhost:5000/posts/", {
         headers: {
           Authorization: ` Bearer ${token}`,
@@ -26,6 +28,7 @@ const Home = () => {
         console.log("result data:", result.data);
         setPosts(result.data.posts);
         setUserId(result.data.userId);
+        setMyId(result.data.userId);
       })
       .catch((err) => {
         console.log(err);
@@ -34,143 +37,122 @@ const Home = () => {
 
   console.log("post: ", posts);
   return (
-    <div className="Dash">
+    <>
+      <div
+        className="click_new_post"
+        onClick={(e) => {
+          navigate("/newPost");
+        }}
+      >
+        <div className="test">
+          <div className="whats_on">Whats on your Mind ?</div>
+          <div className="line_creatpost"></div>
+        </div>
+      </div>
       {posts ? (
         posts.map((element, i) => {
           console.log(posts);
           console.log("user:", element.user._id);
           console.log(userId);
           return (
-            <div className="squar">
-              <Link to={`/profile/${element.user._id}`}></Link> // link to profile/ and to useParams in profile comopnents. 
-              <button
-                className="newbutton"
-                onClick={(e) => {
-                  navigate("/newPost");
-                }}
-              >
-                New Post
-              </button>
-              <div className="tit_des_dele_1">
-                <div className="body">{element.description}</div>
-                {userId == element.user._id ? (
-                  <button
-                    className="delete"
-                    onClick={(e) => {
-                      axios
-                        .delete(`http://localhost:5000/posts/${element._id}`)
-                        .then((result) => {
-                          getAllPosts();
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                        });
-                    }}
-                  >
-                    delete
-                  </button>
-                ) : (
-                  <></>
-                )}
-              </div>
-              <div className="style_div">
-                {userId == element.user._id ? (
-                  <div className="caertPost_update">
-                    <h1 className="border_bottom_h1">Update Posts</h1>
-
-                    <div className="border_bottom">
-                      <input
-                        type="text"
-                        className="Post_update"
-                        placeholder="description"
-                        onChange={(e) => {
-                          setDescription(e.target.value);
-                        }}
-                      />
-                    </div>
-                    <button
-                      className="update"
-                      onClick={(e) => {
-                        e.target.style.background =
-                          "linear-gradient(-45deg,#CAC531,#F3F9A7)";
-                        e.target.style.color = "black";
-                        axios
-                          .put(`http://localhost:5000/posts/${element._id}`, {
-                            description,
-                          })
-                          .then((result) => {
-                            getAllPosts();
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
-                      }}
-                    >
-                      Update
-                    </button>
+            <div className="Post" key={i}>
+              <div className="user_and_drop">
+                <Link className="linkreg" to={`/profile/${element.user._id}`}>
+                  <div className="user_name">{element.user.userName}</div>
+                </Link>{" "}
+                {/*link to profile/ and to useParams in profile comopnents*/}
+                <div className="dropdown">
+                  <div className="dropbtn">
+                    <BsListUl className="BsListUl" />
+                    <i className="fa fa-caret-down"></i>
                   </div>
-                ) : (
-                  <></>
-                )}
 
-                <div className="comment_AddComment">
-                  {element.comments.map((element, i) => {
-                    return (
-                      <div className="comment_style">
-                        comment: {element.comment}
+                  <div className="dropdown-content">
+                    {userId == element.user._id ? (
+                      <button
+                        className="button_delete"
+                        onClick={(e) => {
+                          axios
+                            .delete(
+                              `http://localhost:5000/posts/${element._id}`
+                            )
+                            .then((result) => {
+                              getAllPosts();
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                        }}
+                      >
+                        delete
+                      </button>
+                    ) : (
+                      <></>
+                    )}
+
+                    {userId == element.user._id ? (
+                      <div className="update">
+                        <div className="title_upadte">Edit post</div>
+
+                        <input
+                          type="text"
+                          className="Post_update"
+                          placeholder="description"
+                          onChange={(e) => {
+                            setDescription(e.target.value);
+                          }}
+                        />
+
+                        <button
+                          className="button_update"
+                          onClick={(e) => {
+                            e.target.style.background =
+                              "linear-gradient(-45deg,#CAC531,#F3F9A7)";
+                            e.target.style.color = "black";
+                            axios
+                              .put(
+                                `http://localhost:5000/posts/${element._id}`,
+                                {
+                                  description,
+                                }
+                              )
+                              .then((result) => {
+                                getAllPosts();
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                              });
+                          }}
+                        >
+                          Save
+                        </button>
                       </div>
-                    );
-                  })}
-
-                  <div className="edit_style_comment">
-                    <input
-                      type="text"
-                      className="comment"
-                      placeholder="type here.."
-                      onChange={(e) => {
-                        setComment(e.target.value);
-                      }}
-                    />
-
-                    <button
-                      className="butt_comment"
-                      onClick={(e) => {
-                        e.target.style.background =
-                          "linear-gradient(-45deg,#CAC531,#F3F9A7)";
-                        e.target.style.color = "black";
-
-                        axios
-                          .post(
-                            `http://localhost:5000/posts/${element._id}/comments`,
-                            {
-                              comment,
-                            },
-                            {
-                              headers: {
-                                Authorization: ` Bearer ${token}`,
-                              },
-                            }
-                          )
-                          .then((result) => {
-                            getAllPosts();
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
-                      }}
-                    >
-                      Add New Comment
-                    </button>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
               </div>
+              <div className="description">
+                <div className="body">{element.description}</div>
+              </div>
+
+              <div className="line_post"></div>
+              <Link className="linkreg" to={`/posts/${element._id}/post`}>
+                <div className="show_comments">
+                  <div>
+                    <BsChatDots />
+                  </div>{" "}
+                  Comments
+                </div>
+              </Link>
             </div>
           );
         })
       ) : (
         <di className="No">No Posts</di>
       )}
-    </div>
+    </>
   );
 };
 
