@@ -5,17 +5,19 @@ const commenstModel = require("../database/models/commentsSchema");
 //1-function to create post
 const createNewPost = (req, res) => {
   const post_Id = req.params.post_Id;
-  const { title, description } = req.body;
+  const { description } = req.body;
 
   const newPost = new postsModel({
-    title,
+   
     description,
-    user:req.token.userId
+    user:req.token.userId,
+    role:req.token.role
   });
 
   newPost
     .save()
     .then((result) => {
+      console.log(result);
       res.status(201).json({
         success: true,
         massage: "Success post created",
@@ -29,6 +31,7 @@ const createNewPost = (req, res) => {
 
 // 2 -function get all posts
 const getAllPosts = (req, res) => {
+  const userId = req.token.userId;
   postsModel
     .find({})
     .populate("comments", "comment-_id").populate("user")
@@ -36,6 +39,7 @@ const getAllPosts = (req, res) => {
       res.status(200).json({
         success: true,
         massage: "All the posts",
+        userId: userId,
         posts: result,
       });
     })
@@ -50,7 +54,7 @@ const getPostsByUserName = (req, res) => {
   const user = req.params.user;
 
   postsModel
-    .find({ user })
+    .find({ user }).populate("user")
     .then((result) => {
       if (result.length == 0) {
         return res
@@ -155,12 +159,12 @@ const getPostById = (req, res) => {
   let id = req.params.id;
   postsModel
     .findById(id)
-    .populate("comments", "comment-_id")
+    .populate({path : "comments", populate : {path : 'commenter'}}).populate("user")
     .then((result) => {
       res.status(200).json({
         success: true,
         massage: `The Post ${id} `,
-        posts: result,
+        posts: [result],
       });
 
       console.log("besho");
