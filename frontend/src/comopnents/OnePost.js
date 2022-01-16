@@ -147,11 +147,14 @@ const OnePost = () => {
                   )}
                 </div>
 
-                {/* <input className="Add_comment"><AiFillApple className="apple"/> write comment here...></input> */}
+            
 
                 <div className="add_comment_syle">
                   <input
-                    className="Add_comment"
+                    className="Add_comment" onChange={(e)=>{
+                      setComment(e.target.value);
+                 
+                    }}
                     type="text"
                     placeholder="write comment here..."
                   />{" "}
@@ -159,6 +162,24 @@ const OnePost = () => {
                     className="apple"
                     onClick={(e) => {
                       console.log("الحمدلله");
+                      axios
+                      .post(
+                        `http://localhost:5000/posts/${element._id}/comments/`,
+                        {
+                          comment,
+                        },
+                        {
+                          headers: {
+                            Authorization: ` Bearer ${token}`,
+                          },
+                        }
+                      )
+                      .then((result) => {
+                        getOnePost();
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
                     }}
                   />
                 </div>
