@@ -3,11 +3,18 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
-import { BsChatDots, BsListUl,BsPinFill ,BsFillHeartFill,BsFillGeoAltFill,BsFillPersonFill} from "react-icons/bs";
-import { AiFillApple, AiFillDelete,AiFillHourglass} from "react-icons/ai";
+import {
+  BsChatDots,
+  BsListUl,
+  BsPinFill,
+  BsFillHeartFill,
+  BsFillGeoAltFill,
+  BsFillPersonFill,
+} from "react-icons/bs";
+import { AiFillApple, AiFillDelete, AiFillHourglass } from "react-icons/ai";
 import { ImHome3 } from "react-icons/im";
 import { FaUserGraduate } from "react-icons/fa";
-
+import{Image}from "cloudinary-react";
 
 const Profile = () => {
   const { id } = useParams();
@@ -17,6 +24,9 @@ const Profile = () => {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [info, setInfo] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [uploadImage,setUploadImage]=useState("");
+
   const navigate = useNavigate();
 
   const allPostsForUser = () => {
@@ -49,29 +59,58 @@ const Profile = () => {
       });
   };
 
+  const uploadPhoto = () => {
+    console.log(photo);
+    const formData = new FormData();
+    formData.append("file", photo);
+    formData.append("upload_preset", "wyggi4ze");
+
+    axios
+      .post("https://api.cloudinary.com/v1_1/dvg9eijgb/image/upload", formData)
+      .then((response) => {
+        console.log(response);
+        setUploadImage(response.data.secure_url)
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     allPostsForUser();
     getInfoUser();
   }, [id]);
   console.log("infooooooooo", info);
 
+  console.log("photo url :",uploadImage);
+
   return (
     <>
       <div className="rectangularrr_cover">
         <div className="cover_and_pohoto">
           <img
+       
             className="cover"
             src="http://iamfearlesssoul.com/wp-content/uploads/2016/11/facebook-SOUL-dont-give-up-VH.jpg"
           />
           <img
-            className="photo_profile"
-            src="https://scontent.famm6-1.fna.fbcdn.net/v/t1.6435-9/173242211_1092876921199476_1246742746665098615_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeGzItc6qhQkw4J8sAgifUczBll5eW2af4QGWXl5bZp_hOgattAfVKALj5FpOvmqtGUFX6Us09fBVbXtfbfjYxDA&_nc_ohc=f4ADnImphcgAX8ev_WN&_nc_ht=scontent.famm6-1.fna&oh=00_AT8GIw4pnr6Hrcn8QA5fc0SQhAscsA_Sx9X3h_m1Ch6DrA&oe=62090139"
+            className="photo_profile"   cloudName="dvg9eijgb"  src={uploadImage}
             width="100%"
           />
 
           <div className="container_photo_userName">
-            <div className="userNmae_for_profile">{name}</div>
+            <div className="userNmae_for_profile"> {name}</div>
           </div>
+
+          <input
+            type="file"
+            onChange={(e) => {
+              setPhoto(e.target.files[0]);
+            }}
+          />
+
+          <button onClick={uploadPhoto}> upload</button>
         </div>
       </div>
 
@@ -81,18 +120,35 @@ const Profile = () => {
             info.map((element, i) => {
               return (
                 <>
-              
                   <div className="info_style">
                     <div className="word_info"> Intro</div>
-                    <div className="lives"><ImHome3 className="ic"/> lives in Amman - Jordan</div>
-                    <div className="country" > <BsFillGeoAltFill className="ic"/> from {element.country}</div>
-                    <div className="age"> <AiFillHourglass className="ic"/>Age {element.age}</div>
-                       <div className="gender"> <BsFillPersonFill className="ic"/> {element.gender}</div>
-                    <div className="study"> <FaUserGraduate className="ic"/>Studied at University of Jordan</div>
-                    <div className="love"> <BsFillHeartFill className="ic"/>Single</div>
-
+                    <div className="lives">
+                      <ImHome3 className="ic" /> lives in Amman - Jordan
+                    </div>
+                    <div className="country">
+                      {" "}
+                      <BsFillGeoAltFill className="ic" /> from {element.country}
+                    </div>
+                    <div className="age">
+                      {" "}
+                      <AiFillHourglass className="ic" />
+                      Age {element.age}
+                    </div>
+                    <div className="gender">
+                      {" "}
+                      <BsFillPersonFill className="ic" /> {element.gender}
+                    </div>
+                    <div className="study">
+                      {" "}
+                      <FaUserGraduate className="ic" />
+                      Studied at University of Jordan
+                    </div>
+                    <div className="love">
+                      {" "}
+                      <BsFillHeartFill className="ic" />
+                      Single
+                    </div>
                   </div>
-               
                 </>
               );
             })
@@ -111,7 +167,7 @@ const Profile = () => {
               <div className="user_imge">
                 <img
                   className="imge"
-                  src="https://www.everblazing.org/wp-content/uploads/2017/06/avatar-372-456324-300x300.png"
+                  src={uploadImage}
                   alt=""
                   width="100%"
                 />
@@ -131,7 +187,7 @@ const Profile = () => {
                     <div className="user_imge">
                       <img
                         className="imge"
-                        src="https://www.everblazing.org/wp-content/uploads/2017/06/avatar-372-456324-300x300.png"
+                        src={uploadImage}
                         alt=""
                         width="100%"
                       />
