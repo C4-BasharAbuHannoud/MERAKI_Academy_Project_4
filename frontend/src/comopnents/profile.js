@@ -3,8 +3,11 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
-import { BsChatDots, BsListUl } from "react-icons/bs";
-import { AiFillApple, AiFillDelete } from "react-icons/ai";
+import { BsChatDots, BsListUl,BsPinFill ,BsFillHeartFill,BsFillGeoAltFill,BsFillPersonFill} from "react-icons/bs";
+import { AiFillApple, AiFillDelete,AiFillHourglass} from "react-icons/ai";
+import { ImHome3 } from "react-icons/im";
+import { FaUserGraduate } from "react-icons/fa";
+
 
 const Profile = () => {
   const { id } = useParams();
@@ -13,13 +16,8 @@ const Profile = () => {
   const token = localStorage.getItem("token");
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
-  const [info,setInfo]=useState("");
+  const [info, setInfo] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    allPostsForUser();
-    getInfoUser();
-  }, [id]);
 
   const allPostsForUser = () => {
     axios
@@ -39,20 +37,23 @@ const Profile = () => {
       });
   };
 
+  const getInfoUser = () => {
+    axios
+      .get(`http://localhost:5000/users/${id}`)
+      .then((result) => {
+        console.log("result Info:", result.data.Info);
+        setInfo(result.data.Info);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  const getInfoUser = ()=>{
-
-    axios.get(`http://localhost:5000/users/${id}`).then((result) => {
-      console.log("result Info:", result.data.Info);
-      setInfo(result.data.Info);
-     
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-
-  console.log("infooooooooo",info)
+  useEffect(() => {
+    allPostsForUser();
+    getInfoUser();
+  }, [id]);
+  console.log("infooooooooo", info);
 
   return (
     <>
@@ -74,72 +75,82 @@ const Profile = () => {
         </div>
       </div>
 
-<div className="all_contain_profile">    
+      <div className="all_contain_profile">
+        <div className="div_info_user">
+          {info ? (
+            info.map((element, i) => {
+              return (
+                <>
+              
+                  <div className="info_style">
+                    <div className="word_info"> Intro</div>
+                    <div className="lives"><ImHome3 className="ic"/> lives in Amman - Jordan</div>
+                    <div className="country" > <BsFillGeoAltFill className="ic"/> from {element.country}</div>
+                    <div className="age"> <AiFillHourglass className="ic"/>Age {element.age}</div>
+                       <div className="gender"> <BsFillPersonFill className="ic"/> {element.gender}</div>
+                    <div className="study"> <FaUserGraduate className="ic"/>Studied at University of Jordan</div>
+                    <div className="love"> <BsFillHeartFill className="ic"/>Single</div>
 
-<div className="div_info_user">
-
-{/* 
-{info.map((element,i)=>{
-
-  return(
-    <div> {element.age}</div>
-  )
-})} */}
-
-
-
-</div>
-<div className="posts_and_create">
-      <div
-        className="click_new_post"
-        onClick={(e) => {
-          navigate("/newPost");
-        }}
-      >
-        <div className="test">
-          <div className="user_imge">
-            <img
-              className="imge"
-              src="https://www.everblazing.org/wp-content/uploads/2017/06/avatar-372-456324-300x300.png"
-              alt=""
-              width="100%"
-            />
-            <div className="whats_on">
-              {" "}
-              <div>Whats on your Mind</div> <div>{name}</div> ?
+                  </div>
+               
+                </>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </div>
+        <div className="posts_and_create">
+          <div
+            className="click_new_post"
+            onClick={(e) => {
+              navigate("/newPost");
+            }}
+          >
+            <div className="test">
+              <div className="user_imge">
+                <img
+                  className="imge"
+                  src="https://www.everblazing.org/wp-content/uploads/2017/06/avatar-372-456324-300x300.png"
+                  alt=""
+                  width="100%"
+                />
+                <div className="whats_on">
+                  {" "}
+                  <div>Whats on your Mind</div> <div>{name}</div> ?
+                </div>
+              </div>
+              <div className="line_creatpost"></div>
             </div>
           </div>
-          <div className="line_creatpost"></div>
-        </div>
-      </div>
-      {posts ? (
-        posts.map((element, i) => {
-          console.log(posts);
-          console.log("user:", element.user._id);
-          console.log(userId);
-          return (
-            <div className="Post" key={i}>
-              <div className="user_and_drop">
-                <div className="user_imge">
-                  <img
-                    className="imge"
-                    src="https://www.everblazing.org/wp-content/uploads/2017/06/avatar-372-456324-300x300.png"
-                    alt=""
-                    width="100%"
-                  />
-                  <Link className="linkreg" to={`/profile/${element.user._id}`}>
-                    <div className="user_name">{element.user.userName}</div>
-                  </Link>{" "}
-                </div>
+          {posts ? (
+            posts.map((element, i) => {
+              return (
+                <div className="Post" key={i}>
+                  <div className="user_and_drop">
+                    <div className="user_imge">
+                      <img
+                        className="imge"
+                        src="https://www.everblazing.org/wp-content/uploads/2017/06/avatar-372-456324-300x300.png"
+                        alt=""
+                        width="100%"
+                      />
+                      <Link
+                        className="linkreg"
+                        to={`/profile/${element.user._id}`}
+                      >
+                        <div className="user_name">{element.user.userName}</div>
+                      </Link>{" "}
+                    </div>
 
-                <div className="dropdown">
-                  <div className="dropbtn">
-                    <BsListUl className="BsListUl" />
-                    <i className="fa fa-caret-down"></i>
-                  </div>
+                    <div className="dropdown">
+                      <div className="dropbtn">
+                        <BsListUl className="BsListUl" />
+                        <i className="fa fa-caret-down"></i>
+                      </div>
 
-                  <div className="dropdown-content">
-                    {/* <Modal show={show} onHide={handleClose}>
+                      <div className="dropdown-content">
+                        {/* <Modal show={show} onHide={handleClose}>
                       <Modal.Header closeButton>
                         <Modal.Title>Modal heading</Modal.Title>
                       </Modal.Header>
@@ -156,102 +167,101 @@ const Profile = () => {
                       </Modal.Footer>
                     </Modal> */}
 
-                    <div className="style_dropdown">
-                      {userId == element.user._id ? (
-                        <div className="style_drop_delete">
-                          <AiFillDelete className="icon_delete" />
-                          <button
-                            className="button_delete"
-                            onClick={(e) => {
-                              axios
-                                .delete(
-                                  `http://localhost:5000/posts/${element._id}`
-                                )
-                                .then((result) => {
-                                  allPostsForUser();
-                                })
-                                .catch((err) => {
-                                  console.log(err);
-                                });
-                            }}
-                          >
-                            delete{" "}
-                          </button>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
+                        <div className="style_dropdown">
+                          {userId == element.user._id ? (
+                            <div className="style_drop_delete">
+                              <AiFillDelete className="icon_delete" />
+                              <button
+                                className="button_delete"
+                                onClick={(e) => {
+                                  axios
+                                    .delete(
+                                      `http://localhost:5000/posts/${element._id}`
+                                    )
+                                    .then((result) => {
+                                      allPostsForUser();
+                                    })
+                                    .catch((err) => {
+                                      console.log(err);
+                                    });
+                                }}
+                              >
+                                delete{" "}
+                              </button>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
 
-                      {userId == element.user._id ? (
-                        <button>
-                          {" "}
-                          Edit
-                          <div className="update">
-                            <div className="title_upadte">Edit post</div>
+                          {userId == element.user._id ? (
+                            <button>
+                              {" "}
+                              Edit
+                              <div className="update">
+                                <div className="title_upadte">Edit post</div>
 
-                            <input
-                              type="text"
-                              className="Post_update"
-                              placeholder="description"
-                              onChange={(e) => {
-                                setDescription(e.target.value);
-                              }}
-                            />
+                                <input
+                                  type="text"
+                                  className="Post_update"
+                                  placeholder="description"
+                                  onChange={(e) => {
+                                    setDescription(e.target.value);
+                                  }}
+                                />
 
-                            <button
-                              className="button_update"
-                              onClick={(e) => {
-                                e.target.style.background =
-                                  "linear-gradient(-45deg,#CAC531,#F3F9A7)";
-                                e.target.style.color = "black";
-                                axios
-                                  .put(
-                                    `http://localhost:5000/posts/${element._id}`,
-                                    {
-                                      description,
-                                    }
-                                  )
-                                  .then((result) => {
-                                    allPostsForUser();
-                                  })
-                                  .catch((err) => {
-                                    console.log(err);
-                                  });
-                              }}
-                            >
-                              Save
+                                <button
+                                  className="button_update"
+                                  onClick={(e) => {
+                                    e.target.style.background =
+                                      "linear-gradient(-45deg,#CAC531,#F3F9A7)";
+                                    e.target.style.color = "black";
+                                    axios
+                                      .put(
+                                        `http://localhost:5000/posts/${element._id}`,
+                                        {
+                                          description,
+                                        }
+                                      )
+                                      .then((result) => {
+                                        allPostsForUser();
+                                      })
+                                      .catch((err) => {
+                                        console.log(err);
+                                      });
+                                  }}
+                                >
+                                  Save
+                                </button>
+                              </div>
                             </button>
-                          </div>
-                        </button>
-                      ) : (
-                        <></>
-                      )}
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="description">
-                <div className="body">{element.description}</div>
-              </div>
+                  <div className="description">
+                    <div className="body">{element.description}</div>
+                  </div>
 
-              <div className="line_post"></div>
-              <Link className="linkreg" to={`/posts/${element._id}/post`}>
-                <div className="show_comments">
-                  <div>
-                    <BsChatDots />
-                  </div>{" "}
-                  Comments
+                  <div className="line_post"></div>
+                  <Link className="linkreg" to={`/posts/${element._id}/post`}>
+                    <div className="show_comments">
+                      <div>
+                        <BsChatDots />
+                      </div>{" "}
+                      Comments
+                    </div>
+                  </Link>
                 </div>
-              </Link>
-            </div>
-          );
-        })
-      ) : (
-        <div className="No">No Posts</div>
-
-      )}
-</div>
-</div>  
+              );
+            })
+          ) : (
+            <div className="No">No Posts</div>
+          )}
+        </div>
+      </div>
     </>
   );
 };
