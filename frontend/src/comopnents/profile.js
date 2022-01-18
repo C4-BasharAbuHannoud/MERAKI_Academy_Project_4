@@ -14,7 +14,7 @@ import {
 import { AiFillApple, AiFillDelete, AiFillHourglass } from "react-icons/ai";
 import { ImHome3 } from "react-icons/im";
 import { FaUserGraduate } from "react-icons/fa";
-import{Image}from "cloudinary-react";
+import { Image } from "cloudinary-react";
 
 const Profile = () => {
   const { id } = useParams();
@@ -25,7 +25,8 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [info, setInfo] = useState("");
   const [photo, setPhoto] = useState("");
-  const [uploadImage,setUploadImage]=useState("");
+  const [uploadImage, setUploadImage] = useState(""); /// for body to put requst
+  const [updateImage, setUpdateImage] = useState(""); //// for put and put src updateImage
 
   const navigate = useNavigate();
 
@@ -40,7 +41,6 @@ const Profile = () => {
         console.log("result data:", result.data);
         setPosts(result.data.posts);
         setUserId(result.data.userId);
-        setName(result.data.posts[0].user.userName);
       })
       .catch((err) => {
         console.log(err);
@@ -53,64 +53,100 @@ const Profile = () => {
       .then((result) => {
         console.log("result Info:", result.data.Info);
         setInfo(result.data.Info);
+        setName(result.data.Info[0].userName);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const uploadPhoto = () => {
+  const uploadPhoto = async () => {
     console.log(photo);
     const formData = new FormData();
     formData.append("file", photo);
     formData.append("upload_preset", "wyggi4ze");
 
-    axios
+    await axios
       .post("https://api.cloudinary.com/v1_1/dvg9eijgb/image/upload", formData)
       .then((response) => {
         console.log(response);
-        setUploadImage(response.data.secure_url)
-        
+        getInfoUser();
+        setUploadImage(response.data.secure_url);
+        console.log("userId", id);
       })
       .catch((err) => {
+      
+        console.log(err);
+      });
+  };
+
+  const updatePhoto = async () => {
+  
+
+    await axios
+      .put(`http://localhost:5000/users/${id}`, {
+        image: uploadImage,
+      })
+      .then((result) => {
+        setUpdateImage(result.data.image.image);
+        
+        allPostsForUser();
+        getInfoUser();
+       
+      })
+      .catch((err) => {
+      
         console.log(err);
       });
   };
 
   useEffect(() => {
+  
     allPostsForUser();
     getInfoUser();
   }, [id]);
   console.log("infooooooooo", info);
 
-  console.log("photo url :",uploadImage);
-
   return (
     <>
       <div className="rectangularrr_cover">
         <div className="cover_and_pohoto">
-          <img
-       
-            className="cover"
-            src="http://iamfearlesssoul.com/wp-content/uploads/2016/11/facebook-SOUL-dont-give-up-VH.jpg"
-          />
-          <img
-            className="photo_profile"   cloudName="dvg9eijgb"  src={uploadImage}
-            width="100%"
-          />
-
+          {info &&
+            info.map((e, i) => (
+              <>
+                <img
+                  className="cover"
+                  src="http://iamfearlesssoul.com/wp-content/uploads/2016/11/facebook-SOUL-dont-give-up-VH.jpg"
+                />
+                <img
+                  className="photo_profile"
+                  cloudName="dvg9eijgb"
+                  src={e.image}
+                  width="100%"
+                />
+              </>
+            ))}
           <div className="container_photo_userName">
             <div className="userNmae_for_profile"> {name}</div>
           </div>
+          <div className="just_to clear">
+            <input
+              type="file"
+              onChange={(e) => {
+                setPhoto(e.target.files[0]);
+              }}
+            />
 
-          <input
-            type="file"
-            onChange={(e) => {
-              setPhoto(e.target.files[0]);
-            }}
-          />
-
-          <button onClick={uploadPhoto}> upload</button>
+            <button
+              onClick={() => {
+                uploadPhoto();
+              }}
+            >
+              {" "}
+              upload
+            </button>
+            <button onClick={updatePhoto}> save</button>
+          </div>
         </div>
       </div>
 
@@ -163,23 +199,26 @@ const Profile = () => {
               navigate("/newPost");
             }}
           >
-            <div className="test">
-              <div className="user_imge">
-                <img
-                  className="imge"
-                  src={uploadImage}
-                  alt=""
-                  width="100%"
-                />
-                <div className="whats_on">
-                  {" "}
-                  <div>Whats on your Mind</div> <div>{name}</div> ?
+            {info &&
+              info.map((e, i) => (
+                <div className="test">
+                  <div className="user_imge">
+                    <img
+                      className="imge"
+                      src={e.image}
+                      alt=""
+                      width="100%"
+                    />
+                    <div className="whats_on">
+                      {" "}
+                      <div>Whats on your Mind</div> <div>{name}</div> ?
+                    </div>
+                  </div>
+                  <div className="line_creatpost"></div>
                 </div>
-              </div>
-              <div className="line_creatpost"></div>
-            </div>
+              ))}
           </div>
-          {posts ? (
+          {posts[0] ? (
             posts.map((element, i) => {
               return (
                 <div className="Post" key={i}>
@@ -187,7 +226,7 @@ const Profile = () => {
                     <div className="user_imge">
                       <img
                         className="imge"
-                        src={uploadImage}
+                        src={element.user.image}
                         alt=""
                         width="100%"
                       />
@@ -206,23 +245,6 @@ const Profile = () => {
                       </div>
 
                       <div className="dropdown-content">
-                        {/* <Modal show={show} onHide={handleClose}>
-                      <Modal.Header closeButton>
-                        <Modal.Title>Modal heading</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        Woohoo, you're reading this text in a modal!
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
-                        <Button variant="primary" onClick={handleClose}>
-                          Save Changes
-                        </Button>
-                      </Modal.Footer>
-                    </Modal> */}
-
                         <div className="style_dropdown">
                           {userId == element.user._id ? (
                             <div className="style_drop_delete">
