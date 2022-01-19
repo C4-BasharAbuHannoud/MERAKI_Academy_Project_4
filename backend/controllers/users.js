@@ -3,7 +3,8 @@ const userModel = require("../database/models/userSchema");
 
 //1- Creat an new user
 const createNewUser = (req, res) => {
-  const { userName, email, password,gender,age, country, role } = req.body;
+  const { userName, email, password, gender, age, country, role, image } =
+    req.body;
 
   const newUser = new userModel({
     userName,
@@ -12,6 +13,7 @@ const createNewUser = (req, res) => {
     gender,
     age,
     country,
+    image,
     role,
   });
 
@@ -39,7 +41,7 @@ const createNewUser = (req, res) => {
     });
 };
 
-const getInfoUser =(req,res)=>{
+const getInfoUser = (req, res) => {
   let id = req.params.info;
   userModel
     .findById(id)
@@ -47,10 +49,8 @@ const getInfoUser =(req,res)=>{
       res.status(200).json({
         success: true,
         massage: `The User ${id} `,
-        Info:[result],
+        Info: [result],
       });
-
-    
     })
     .catch((err) => {
       res.status(404).json({
@@ -58,9 +58,55 @@ const getInfoUser =(req,res)=>{
         massage: `The User ==> ${id} Not Found`,
       });
     });
-}
+};
+
+const updateImage = (req, res) => {
+  const userId = req.params.image;
+  // const { image } = req.body;
+
+  userModel
+    .findByIdAndUpdate(userId, req.body, { new: true })
+    .then((result) => {
+      if (result == null) {
+        return res.status(404).json({
+          success: false,
+          massage: `The image ==> ${userId} Not Found`,
+        });
+      }
+      res.status(202).json({
+        success: true,
+        massage: `Success Image updated`,
+        image: result,
+      });
+    })
+    .catch((err) => {
+      res.status(404).json({
+        success: false,
+        massage: `The Image for ==> ${userId} Not Found`,
+        err,
+      });
+    });
+};
+
+const getAllUsers = (req, res) => {
+
+  userModel.find({}).then((result) => {
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "All users in Platform",
+        users: result,
+      })
+      .catch((err) => {
+        res.status(500).json({ success: false, massage: "server error" });
+      });
+  });
+};
 
 module.exports = {
   createNewUser,
-  getInfoUser
+  getInfoUser,
+  updateImage,
+  getAllUsers,
 };
