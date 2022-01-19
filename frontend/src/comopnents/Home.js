@@ -59,15 +59,14 @@ const Home = ({ setMyId }) => {
 
   const getAllUsers = async () => {
     await axios
-      .get("http://localhost:5000/users/all/users",{
+      .get("http://localhost:5000/users/all/users", {
         headers: {
           Authorization: ` Bearer ${token}`,
         },
       })
       .then((result) => {
         setAllUsers(result.data.users);
-        console.log("woooo",result.data.users);
-      
+        console.log("woooo", result.data.users);
       })
       .catch((err) => {
         console.log(err);
@@ -75,7 +74,7 @@ const Home = ({ setMyId }) => {
   };
   console.log("important", userId);
   // console.log("post tezea11: ", posts);
-  console.log('beshooooooo',allUsers);
+  console.log("beshooooooo", allUsers);
   return (
     <>
       <div className="contain_all_home">
@@ -249,7 +248,36 @@ const Home = ({ setMyId }) => {
           </div>
         </div>
 
-        <div className="rigth_home"></div>
+        <div className="rigth_home">
+          <div className="suggtion_frined">
+            <div className="title_suggtion">Suggestions</div>{" "}
+            <div className="may_suggtion">People You May Know</div>
+            <div className="gap_frined">
+            {allUsers &&
+              allUsers.map((e, i) => (
+                <>
+               
+                  {i !== 0 ? (
+                     
+                    <div className="frined">
+                    
+                  
+                      <img className="imge" src={e.image} alt="" width="100%" />
+                      <Link className="linkFrined" to={`/profile/${e._id}`}>
+                        <div className="user_name">{e.userName}</div>
+                      </Link>
+
+                      </div>
+                  
+                  ) : (
+                    ""
+                  )}
+                    
+                </>
+              ))}
+              </div>
+          </div>
+        </div>
       </div>
       <button className="load_more">Load more</button>
     </>
