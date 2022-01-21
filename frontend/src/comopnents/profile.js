@@ -14,9 +14,12 @@ import {
 import { AiFillApple, AiFillDelete, AiFillHourglass } from "react-icons/ai";
 import { ImHome3 } from "react-icons/im";
 import { FaUserGraduate } from "react-icons/fa";
-import { Image } from "cloudinary-react";
+import { BsFillCameraFill, BsArrowDownSquareFill } from "react-icons/bs";
 
-const Profile = () => {
+import Model from "react-modal";
+Model.setAppElement("#root");
+
+const Profile = ({ myId }) => {
   const { id } = useParams();
   const [posts, setPosts] = useState([]);
   const [userId, setUserId] = useState("");
@@ -27,6 +30,9 @@ const Profile = () => {
   const [photo, setPhoto] = useState("");
   const [uploadImage, setUploadImage] = useState(""); /// for body to put requst
   const [updateImage, setUpdateImage] = useState(""); //// for put and put src updateImage
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpen2, setIsOpen2] = useState(false);
+  const [modalIsOpen3, setIsOpen3] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,9 +44,8 @@ const Profile = () => {
         },
       })
       .then((result) => {
-        console.log("result data:", result.data);
-        setPosts(result.data.posts);
-        setUserId(result.data.userId);
+        console.log("result data 122112:", result.data);
+        setPosts(result.data.posts.reverse());
       })
       .catch((err) => {
         console.log(err);
@@ -54,6 +59,7 @@ const Profile = () => {
         console.log("result Info:", result.data.Info);
         setInfo(result.data.Info);
         setName(result.data.Info[0].userName);
+        setUserId(result.data.Info[0]._id);
       })
       .catch((err) => {
         console.log(err);
@@ -75,33 +81,27 @@ const Profile = () => {
         console.log("userId", id);
       })
       .catch((err) => {
-      
         console.log(err);
       });
   };
 
   const updatePhoto = async () => {
-  
-
     await axios
       .put(`http://localhost:5000/users/${id}`, {
         image: uploadImage,
       })
       .then((result) => {
         setUpdateImage(result.data.image.image);
-        
+
         allPostsForUser();
         getInfoUser();
-       
       })
       .catch((err) => {
-      
         console.log(err);
       });
   };
 
   useEffect(() => {
-  
     allPostsForUser();
     getInfoUser();
   }, [id]);
@@ -120,33 +120,136 @@ const Profile = () => {
                 />
                 <img
                   className="photo_profile"
-                  cloudName="dvg9eijgb"
+                  cloudname="dvg9eijgb"
                   src={e.image}
                   width="100%"
+                  onClick={() => {
+                    setIsOpen3(true);
+                  }}
                 />
+
+                <Model
+                  isOpen={modalIsOpen3}
+                  onRequestClose={() => setIsOpen3(false)}
+                  style={{
+                    overlay: {
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                    },
+                    content: {
+                      top: "50%",
+                      left: "50%",
+                      right: "auto",
+                      bottom: "auto",
+                      marginRight: "-50%",
+                      transform: "translate(-50%, -50%)",
+                      width: "650px",
+
+                      height: " 500px",
+                      backgroundColor: "#ffffff",
+                      borderRadius: "5px",
+                      boxShadow: "-0.2px 1px 7px #dadcdf",
+                    },
+                  }}
+                >
+                  <div>
+                    <img
+                      className="popup_img"
+                      cloudname="dvg9eijgb"
+                      src={e.image}
+                      width="100%"
+                    />
+                  </div>
+                </Model>
               </>
             ))}
           <div className="container_photo_userName">
             <div className="userNmae_for_profile"> {name}</div>
           </div>
-          <div className="just_to clear">
-            <input
-              type="file"
-              onChange={(e) => {
-                setPhoto(e.target.files[0]);
-              }}
-            />
 
-            <button
-              onClick={() => {
-                uploadPhoto();
-              }}
-            >
-              {" "}
-              upload
-            </button>
-            <button onClick={updatePhoto}> save</button>
-          </div>
+          <BsFillCameraFill
+            className="icon_camera"
+            onClick={() => setIsOpen(true)}
+          />
+          <Model
+            isOpen={modalIsOpen}
+            onRequestClose={() => setIsOpen(false)}
+            style={{
+              overlay: {
+                // backgroundColor:'transparent',
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              },
+              content: {
+                top: "50%",
+                left: "50%",
+                right: "auto",
+                bottom: "auto",
+                marginRight: "-50%",
+                transform: "translate(-50%, -50%)",
+                width: "550px",
+
+                height: " 440px",
+                backgroundColor: "#ffffff",
+                borderRadius: "5px",
+                boxShadow: "-0.2px 1px 7px #dadcdf",
+              },
+            }}
+          >
+            <div className="modal_profile_picture">
+              <div className="gap_tit_line">
+                <div className="title_profile">Update profile picture</div>
+                <div className="title_line_pic"> </div>
+              </div>
+
+              <div className="input_icon">
+                <BsArrowDownSquareFill className="icon_arrow" />
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    setPhoto(e.target.files[0]);
+                  }}
+                />
+              </div>
+
+              <div className="upload_icon">
+                <BsArrowDownSquareFill className="icon_arrow" />
+                <button
+                  className="upload_button"
+                  onClick={(e) => {
+                    uploadPhoto();
+                    e.target.style.background =
+                      "linear-gradient(-45deg,#CAC531,#F3F9A7)";
+                    e.target.style.color = "black";
+                  }}
+                >
+                  {" "}
+                  upload
+                </button>
+              </div>
+
+              <div className="Save_icon">
+                <BsArrowDownSquareFill className="icon_arrow" />
+                <button
+                  className="upload_button"
+                  onClick={(e) => {
+                    updatePhoto();
+                    e.target.style.background =
+                      "linear-gradient(-45deg,#CAC531,#F3F9A7)";
+                    e.target.style.color = "black";
+                  }}
+                >
+                  save
+                </button>
+              </div>
+            </div>
+          </Model>
         </div>
       </div>
 
@@ -204,7 +307,7 @@ const Profile = () => {
                 <div className="test">
                   <div className="user_imge">
                     <img
-                      className="imge"
+                      className="imge_whats"
                       src={e.image}
                       alt=""
                       width="100%"
@@ -238,46 +341,51 @@ const Profile = () => {
                       </Link>{" "}
                     </div>
 
-                    <div className="dropdown">
-                      <div className="dropbtn">
-                        <BsListUl className="BsListUl" />
-                        <i className="fa fa-caret-down"></i>
-                      </div>
+                    {console.log("tezevvvvv", element.user._id)}
+                    {console.log("ohhhh", userId)}
+                    {console.log("noooooo", posts)}
 
-                      <div className="dropdown-content">
-                        <div className="style_dropdown">
-                          {userId == element.user._id ? (
-                            <div className="style_drop_delete">
-                              <AiFillDelete className="icon_delete" />
-                              <button
-                                className="button_delete"
-                                onClick={(e) => {
-                                  axios
-                                    .delete(
-                                      `http://localhost:5000/posts/${element._id}`
-                                    )
-                                    .then((result) => {
-                                      allPostsForUser();
-                                    })
-                                    .catch((err) => {
-                                      console.log(err);
-                                    });
-                                }}
-                              >
-                                delete{" "}
-                              </button>
-                            </div>
-                          ) : (
-                            <></>
-                          )}
+                    {myId === element.user._id ? (
+                      <>
+                        <BsListUl
+                          className="icon_drop"
+                          onClick={() => setIsOpen2(true)}
+                        />
+                        <Model
+                          isOpen={modalIsOpen2}
+                          onRequestClose={() => setIsOpen2(false)}
+                          style={{
+                            overlay: {
+                              // backgroundColor:'transparent',
+                              position: "fixed",
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                            },
+                            content: {
+                              top: "50%",
+                              left: "50%",
+                              right: "auto",
+                              bottom: "auto",
+                              marginRight: "-50%",
+                              transform: "translate(-50%, -50%)",
+                              width: "550px",
 
-                          {userId == element.user._id ? (
-                            <button>
-                              {" "}
-                              Edit
+                              height: " 440px",
+                              backgroundColor: "#ffffff",
+                              borderRadius: "5px",
+                              boxShadow: "-0.2px 1px 7px #dadcdf",
+                            },
+                          }}
+                        >
+                          <div className="style_dropdown">
+                            <div className="edit_post">
                               <div className="update">
-                                <div className="title_upadte">Edit post</div>
-
+                                <div className="title_line_editPost">
+                                  <div className="title_upadte">Edit post</div>
+                                  <div className="line_edtiPost"></div>
+                                </div>
                                 <input
                                   type="text"
                                   className="Post_update"
@@ -311,13 +419,39 @@ const Profile = () => {
                                   Save
                                 </button>
                               </div>
-                            </button>
-                          ) : (
-                            <></>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+
+                              <div className="Delete_post">
+                                <div className="title_upadte">Delete Post</div>
+                                <div className="line_edtiPost"></div>
+                                <div className="style_drop_delete">
+                                  <AiFillDelete className="icon_delete" />
+                                  <button
+                                    className="button_delete"
+                                    onClick={(e) => {
+                                      axios
+                                        .delete(
+                                          `http://localhost:5000/posts/${element._id}`
+                                        )
+                                        .then((result) => {
+                                          allPostsForUser();
+                                          setIsOpen(false);
+                                        })
+                                        .catch((err) => {
+                                          console.log(err);
+                                        });
+                                    }}
+                                  >
+                                    delete
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </Model>{" "}
+                      </>
+                    ) : (
+                      <div></div>
+                    )}
                   </div>
                   <div className="description">
                     <div className="body">{element.description}</div>
