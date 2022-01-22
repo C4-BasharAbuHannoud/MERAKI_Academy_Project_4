@@ -90,18 +90,20 @@ const updateImage = (req, res) => {
 
 const getAllUsers = (req, res) => {
 
-  userModel.find({}).then((result) => {
-    res
-      .status(200)
-      .json({
+  const userId = req.token.userId;
+  userModel
+    .find({})
+    .then((result) => {
+      res.status(200).json({
         success: true,
-        message: "All users in Platform",
+        massage: "All the Users",
+        userId: userId,
         users: result,
-      })
-      .catch((err) => {
-        res.status(500).json({ success: false, massage: "server error" });
       });
-  });
+    })
+    .catch((err) => {
+      res.status(500).json({ success: false, massage: "server error" });
+    });
 };
 
 module.exports = {

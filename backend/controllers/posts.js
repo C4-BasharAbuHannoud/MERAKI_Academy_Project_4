@@ -8,16 +8,15 @@ const createNewPost = (req, res) => {
   const { description } = req.body;
 
   const newPost = new postsModel({
-   
     description,
-    user:req.token.userId,
-    role:req.token.role
+    user: req.token.userId,
+    role: req.token.role,
   });
 
   newPost
     .save()
     .then((result) => {
-      console.log(result);
+
       res.status(201).json({
         success: true,
         massage: "Success post created",
@@ -34,7 +33,8 @@ const getAllPosts = (req, res) => {
   const userId = req.token.userId;
   postsModel
     .find({})
-    .populate("comments", "comment-_id").populate("user")
+    .populate("comments", "comment-_id")
+    .populate("user")
     .then((result) => {
       res.status(200).json({
         success: true,
@@ -54,7 +54,8 @@ const getPostsByUserName = (req, res) => {
   const user = req.params.user;
 
   postsModel
-    .find({ user }).populate("user")
+    .find({ user })
+    .populate("user")
     .then((result) => {
       if (result.length == 0) {
         return res
@@ -69,7 +70,7 @@ const getPostsByUserName = (req, res) => {
       });
     })
     .catch((err) => {
-        console.log("hii");
+
       res.status(404).json({ success: false, massage: "The user Not Found" });
     });
 };
@@ -83,12 +84,12 @@ const updatePostById = (req, res) => {
   postsModel
     .findByIdAndUpdate(postId, req.body, { new: true })
     .then((result) => {
-       if (result==null){
-       return res.status(404).json({
-            success: false,
-            massage: `The post ==> ${postId} Not Found`,
-          });
-       }
+      if (result == null) {
+        return res.status(404).json({
+          success: false,
+          massage: `The post ==> ${postId} Not Found`,
+        });
+      }
       res.status(202).json({
         success: true,
         massage: `Success post updated`,
@@ -159,15 +160,14 @@ const getPostById = (req, res) => {
   let id = req.params.id;
   postsModel
     .findById(id)
-    .populate({path : "comments", populate : {path : 'commenter'}}).populate("user")
+    .populate({ path: "comments", populate: { path: "commenter" } })
+    .populate("user")
     .then((result) => {
       res.status(200).json({
         success: true,
         massage: `The Post ${id} `,
         posts: [result],
       });
-
-      console.log("besho");
     })
     .catch((err) => {
       res.status(404).json({
@@ -176,6 +176,7 @@ const getPostById = (req, res) => {
       });
     });
 };
+
 module.exports = {
   createNewPost,
   getAllPosts,

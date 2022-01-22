@@ -21,6 +21,9 @@ app.use("/login", loginRouter);
 const roleRouter = require("./routes/role");
 app.use("/roles", roleRouter);
 
+const cloudinaryRouter = require("./routes/role");
+app.use("/cloudinary", cloudinaryRouter);
+
 const PORT = 5000;
 
 app.listen(PORT, () => {

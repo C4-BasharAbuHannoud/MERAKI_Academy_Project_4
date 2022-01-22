@@ -40,7 +40,7 @@ const Navigation = ({ setToken, myId, allUsersSearch }) => {
           <input
             className="input_search"
             type="text"
-            placeholder="Search Facebook"
+            placeholder="Search friends"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -60,7 +60,7 @@ const Navigation = ({ setToken, myId, allUsersSearch }) => {
           allUsersSearch.map((el, i) =>
             el._id == myId ? (
               <div className="nav_account">
-                <div >
+                <div>
                   <img className="imge_account" src={el.image} />
                 </div>
                 <Link className="linkAccount" to={`/profile/${el._id}`}>
@@ -77,7 +77,6 @@ const Navigation = ({ setToken, myId, allUsersSearch }) => {
         <button
           className="LogOut"
           onClick={(e) => {
-            console.log("hi");
             localStorage.removeItem("token");
             setToken("");
             navigate("/");

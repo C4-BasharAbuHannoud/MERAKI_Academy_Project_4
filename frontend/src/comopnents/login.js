@@ -20,7 +20,13 @@ const Login = ({ setToken }) => {
       <div className="container_for_all">
         {hidden ? (
           <div className="container_login">
-            <div className="slogan"> Welcome to may paltform</div>
+            <div className="flex_qout">
+              <div className="slogan"> Welcome to friends</div>
+              <div className="qout">
+                {" "}
+                Connect with new friends and get to know a new world
+              </div>
+            </div>
             <div className="Login">
               <div className="all_input_login">
                 <div>

@@ -74,7 +74,7 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
         setMyId(result.data.userId);
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   };
 
@@ -88,7 +88,7 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
         setUserId(result.data.Info[0]._id);
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   };
 
@@ -104,7 +104,7 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
         setAllUsersSearch(result.data.users);
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   };
 
@@ -117,7 +117,7 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
         setNews(result.data.results.reverse());
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   };
 
@@ -130,12 +130,10 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
         setWeather(result.data.list);
       })
       .catch((err) => {
-        console.log(err);
+        throw err;
       });
   };
 
-  console.log("wwww", weather);
-  console.log(postsPage);
   return (
     <div>
       <div className="contain_all_home">
@@ -213,8 +211,6 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
           <div className="all_posts_home">
             {postsPage ? (
               postsPage.map((element, i) => {
-                console.log("soso", element._id);
-
                 return (
                   <div className="Post" key={i}>
                     <div className="user_and_drop">
@@ -305,12 +301,10 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
                                       setDescription(e.target.value);
                                     }}
                                   />
-                                  {console.log("tsetttt 44444", element._id)}
+
                                   <button
                                     className="button_update"
                                     onClick={(e) => {
-                                      console.log("tsetttt", element._id);
-
                                       e.target.style.background =
                                         "linear-gradient(-45deg,#CAC531,#F3F9A7)";
                                       e.target.style.color = "black";
@@ -325,7 +319,7 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
                                           getAllPosts();
                                         })
                                         .catch((err) => {
-                                          console.log(err);
+                                          throw err;
                                         });
                                     }}
                                   >
@@ -352,7 +346,7 @@ const Home = ({ setMyId, setAllUsersSearch, toEditPost }) => {
                                             setIsOpen7(false);
                                           })
                                           .catch((err) => {
-                                            console.log(err);
+                                            throw err;
                                           });
                                       }}
                                     >

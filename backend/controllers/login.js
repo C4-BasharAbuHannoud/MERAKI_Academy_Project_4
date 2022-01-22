@@ -29,6 +29,7 @@ const login = (req, res) => {
             success: true,
             massage: " Valid login credentials",
             token,
+            userId: resultArr._id,
           });
         } else {
           res.status(403).json({
