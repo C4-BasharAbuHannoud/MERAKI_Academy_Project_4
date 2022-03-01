@@ -1,7 +1,9 @@
-<h3 align="center">Friends</h3>
-
-<p align="center"> Social media platform (friends)
+<p align="center">
+  <a href="" rel="noopener">
+ <img width=300px height=200px src="https://res.cloudinary.com/dvg9eijgb/image/upload/v1646124852/fxzbhepge73e5atidlod.png" alt="Project logo"></a>
 </p>
+
+<h3 align="center">Friends</h3>
 
 ## 📝 Table of Contents
 
